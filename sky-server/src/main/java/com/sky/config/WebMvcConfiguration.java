@@ -57,9 +57,10 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         return docket;
     }
 
-    /**
-     * 设置静态资源映射
-     * @param registry
+    @Override
+    /*
+      为接口文档页面设置静态资源映射
+      @param registry
      */
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");

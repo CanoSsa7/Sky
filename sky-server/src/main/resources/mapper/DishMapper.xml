@@ -53,6 +53,9 @@
         <result property="status" column="status"/>
         <result property="updateTime" column="update_time"/>
         <result property="categoryName" column="categoryName"/>
+        <result property="description" column="description"/>
+        <result property="image" column="image"/>
+        <result property="price" column="price"/>
         <collection property="flavors" ofType="com.sky.entity.DishFlavor">
             <id property="id" column="flavorId"/>
             <result property="dishId" column="id"/>

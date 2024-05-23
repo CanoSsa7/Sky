@@ -12,6 +12,8 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 import java.io.ByteArrayInputStream;
@@ -21,8 +23,9 @@ import java.io.ByteArrayInputStream;
 @Slf4j
 
 public class AliOssUtil {
-
-
+    /**
+     * 在AliOssConfiguration类中配置与进行Bean装配
+     */
     private String endpoint;
 //    private String accessKeyId;
 //    private String accessKeySecret;

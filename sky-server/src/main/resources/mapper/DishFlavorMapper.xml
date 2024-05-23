@@ -11,4 +11,12 @@
                 (#{flavor.dishId}, #{flavor.name}, #{flavor.value})
             </foreach>
     </insert>
+
+    <select id="getFlavorsByDishIds" resultType="com.sky.entity.DishFlavor">
+        select * from dish_flavor
+        where dish_id in
+        <foreach collection="dishIds" item="dishId" open="(" separator="," close=")">
+            #{dishId}
+        </foreach>
+    </select>
 </mapper>

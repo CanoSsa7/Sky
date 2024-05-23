@@ -72,13 +72,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setStatus(StatusConstant.ENABLE);
         //设置默认密码
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+        /* 注：已通过AOP设置
         //设置创建时间
         employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
         //设置记录创建人和修改人id
         //从ThreadLocal对象中获取，在拦截器解析JWT时存入的ID值
         employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        employee.setUpdateUser(BaseContext.getCurrentId());*/
+
         employeeMapper.insertEmp(employee);
     }
 
@@ -101,6 +103,26 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .id(id)
                 .build();
 
+
+        employeeMapper.update(employee);
+    }
+
+    @Override
+    public Employee getEmployeeById(Long id) {
+
+        Employee employee = employeeMapper.getEmployeeById(id);
+        employee.setPassword("******");
+        return employee;
+    }
+
+    @Override
+    public void updateEmp(EmployeeDTO employeeDTO) {
+        //转为Employee类
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+/*        //设置更改时间和更改用户
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());*/
 
         employeeMapper.update(employee);
     }

@@ -32,7 +32,7 @@ logging:
 sky:
   alioss:
     bucket-name: canossa7
-    endpoint: https://oss-cn-chengdu.aliyuncs.com
+    endpoint: oss-cn-chengdu.aliyuncs.com
 
   jwt:
     # 设置jwt签名加密时使用的秘钥

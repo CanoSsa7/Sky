@@ -6,15 +6,22 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.common.auth.CredentialsProviderFactory;
 import com.aliyun.oss.common.auth.EnvironmentVariableCredentialsProvider;
+import com.sky.properties.AliOssProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.env.Environment;
+
 import java.io.ByteArrayInputStream;
 
 @Data
 @AllArgsConstructor
 @Slf4j
+
 public class AliOssUtil {
+
 
     private String endpoint;
 //    private String accessKeyId;
@@ -31,9 +38,8 @@ public class AliOssUtil {
     public String upload(byte[] bytes, String objectName) throws com.aliyuncs.exceptions.ClientException {
         //更改实例创建方式
         EnvironmentVariableCredentialsProvider credentialsProvider = CredentialsProviderFactory.newEnvironmentVariableCredentialsProvider();
-        OSS ossClient = new OSSClientBuilder().build(endpoint, credentialsProvider);
         // 创建OSSClient实例。
-//        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        OSS ossClient = new OSSClientBuilder().build(endpoint, credentialsProvider);
 
         try {
             // 创建PutObject请求。
@@ -65,7 +71,7 @@ public class AliOssUtil {
                 .append("/")
                 .append(objectName);
 
-        log.info("文件上传到:{}", stringBuilder.toString());
+        log.info("文件上传到:{}", stringBuilder);
 
         return stringBuilder.toString();
     }

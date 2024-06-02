@@ -11,4 +11,18 @@
             #{id}
         </foreach>
     </select>
+
+    <insert id="addsetMealDishes">
+        insert into setmeal_dish(setmeal_id, dish_id, name, price, copies)
+        values
+        <foreach collection="setMealDishes" item="sd" separator=",">
+            (#{sd.setmealId}, #{sd.dishId},#{sd.name}, #{sd.price}, #{sd.copies})
+        </foreach>
+    </insert>
+
+    <update id="setStatusById">
+        update setmeal
+        set status = #{status}
+        where id = #{id};
+    </update>
 </mapper>

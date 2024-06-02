@@ -37,12 +37,12 @@ public class SetmealVO implements Serializable {
     //图片
     private String image;
 
-    //更新时间
-    private LocalDateTime updateTime;
-
-    //分类名称
-    private String categoryName;
-
     //套餐和菜品的关联关系
     private List<SetmealDish> setmealDishes = new ArrayList<>();
+
+    //---额外属性 更新时间
+    private LocalDateTime updateTime;
+
+    //---额外属性 分类名称
+    private String categoryName;
 }

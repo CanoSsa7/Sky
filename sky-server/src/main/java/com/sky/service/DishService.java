@@ -30,4 +30,6 @@ public interface DishService {
     void setStatus(Long dishId, Integer status);
 
     List<Dish> getDishByCategoryId(Long categoryID);
+
+    List<DishVO> listWithFlavor(Dish dish);
 }

@@ -45,3 +45,12 @@ sky:
     admin-ttl: 7890048000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+
+    # 用户端jwt配置
+    user-secret-key: canossa7
+    user-ttl: 7890048000
+    user-token-name: authentication
+
+  wechat:
+    appid: wx45ea71e78a76ba58
+    secret: dcffdad02d83576378b59a046ef6f7a9

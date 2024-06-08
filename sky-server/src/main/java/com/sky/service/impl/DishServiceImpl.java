@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -126,5 +127,49 @@ public class DishServiceImpl implements DishService {
     @Override
     public List<Dish> getDishByCategoryId(Long categoryID) {
         return dishMapper.getDishByCategoryId(categoryID);
+    }
+
+    /**
+     * 根据分类id查询在售中的菜品和口味
+     * @param dish 包含categoryId和status
+     * @return
+     */
+    public List<DishVO> listWithFlavor(Dish dish){
+        List<Dish> dishList = dishMapper.getDishByCategoryId(dish.getCategoryId());
+        // 返回空列表，避免后续空指针异常
+        if (dishList == null || dishList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        // 保留为在售状态的菜品，懒得新写mapper了
+        dishList = dishList.stream()
+                .filter(dish1 ->
+                        dish1.getStatus().equals(StatusConstant.ENABLE))
+                .collect(Collectors.toList());
+        // 返回空列表，如果没有在售菜品
+        if (dishList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        // 获得所有菜品的id
+        List<Long> dishIdList = dishList.stream()
+                .map(Dish::getId)
+                .collect(Collectors.toList());
+
+        // 查询所有菜品的口味
+        List<DishFlavor> flavorsByDishIds = dishFlavorMapper.getFlavorsByDishIds(dishIdList);
+
+        // 生成一个map，其中key是dishId, value是List<DishFlavor>
+        Map<Long, List<DishFlavor>> flavorsMap = flavorsByDishIds.stream()
+                .collect(Collectors.groupingBy(DishFlavor::getDishId));
+
+        List<DishVO> dishVOList = new ArrayList<>();
+        for (Dish d : dishList) {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(d,dishVO);
+            // 获取菜品的所有口味
+            dishVO.setFlavors(flavorsMap.get(d.getId()));
+            dishVOList.add(dishVO);
+        }
+
+        return dishVOList;
     }
 }

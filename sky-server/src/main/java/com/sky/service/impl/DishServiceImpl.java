@@ -135,20 +135,25 @@ public class DishServiceImpl implements DishService {
      * @return
      */
     public List<DishVO> listWithFlavor(Dish dish){
+
         List<Dish> dishList = dishMapper.getDishByCategoryId(dish.getCategoryId());
+
         // 返回空列表，避免后续空指针异常
         if (dishList == null || dishList.isEmpty()) {
             return Collections.emptyList();
         }
+
         // 保留为在售状态的菜品，懒得新写mapper了
         dishList = dishList.stream()
                 .filter(dish1 ->
                         dish1.getStatus().equals(StatusConstant.ENABLE))
                 .collect(Collectors.toList());
+
         // 返回空列表，如果没有在售菜品
         if (dishList.isEmpty()) {
             return Collections.emptyList();
         }
+
         // 获得所有菜品的id
         List<Long> dishIdList = dishList.stream()
                 .map(Dish::getId)

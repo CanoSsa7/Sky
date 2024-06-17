@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,35 +40,44 @@ public class SetMealController {
         PageResult mealsPage = setMealService.getMealsPage(setmealPageQueryDTO);
         return Result.success(mealsPage);
     }
+
     @ApiOperation("新增套餐")
     @PostMapping
+    @CacheEvict(cacheNames = "setMealCache", key = "#setmealDTO.categoryId") // 清理缓存
     public Result addMeal(@RequestBody SetmealDTO setmealDTO){
         log.info("新增套餐");
         setMealService.addSetMeal(setmealDTO);
         return Result.success();
     }
+
     @ApiOperation("修改套餐")
     @PutMapping
+    @CacheEvict(cacheNames = "setMealCache", allEntries = true) // 清理所有缓存
     public Result updateSetMeal(@RequestBody SetmealDTO setmealDTO){
         setMealService.updateSetMeal(setmealDTO);
         return Result.success();
     }
+
     @ApiOperation("查询单个套餐")
     @GetMapping("/{id}")
     public Result<SetmealVO> getSetMeal(@PathVariable(value = "id") Long id){
         SetmealVO setmealVO =  setMealService.getMealById(id);
         return Result.success(setmealVO);
     }
+
     @ApiOperation("修改套餐状态")
+    @CacheEvict(cacheNames = "setMealCache", allEntries = true) // 清理所有缓存
     @PostMapping("/status/{status}")
-    Result setStatus(@PathVariable Integer status,  @RequestParam Long id){
+    public Result setStatus(@PathVariable Integer status,  @RequestParam Long id){
         log.info("修改套餐状态：{}, {}" , id, status);
         setMealService.setStatus(id, status);
         return Result.success();
     }
+
     @ApiOperation("批量删除套餐")
+    @CacheEvict(cacheNames = "setMealCache", allEntries = true) // 清理所有缓存
     @DeleteMapping()
-    Result deleteBatch(@RequestParam List<Long> ids){// 自动解析由逗号拼接的id字符串
+    public Result deleteBatch(@RequestParam List<Long> ids){// 自动解析由逗号拼接的id字符串
         log.info("批量删除套餐：{}", ids);
         setMealService.deleteBatch(ids);
         return Result.success();
